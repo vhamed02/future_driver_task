@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ApiResource]
 class User
 {
     #[ORM\Id]
@@ -19,7 +21,7 @@ class User
     #[ORM\Column(length: 50)]
     private ?string $role = null;
 
-    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\ManyToOne(inversedBy: 'user')]
     private ?Company $company = null;
 
     public function getId(): ?int

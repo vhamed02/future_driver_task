@@ -17,14 +17,14 @@ final class Version20241101235959 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // Company table
-        $this->addSql('CREATE TABLE `companies` (
+        $this->addSql('CREATE TABLE `company` (
                             id INT AUTO_INCREMENT NOT NULL, 
                             name VARCHAR(100) UNIQUE NOT NULL, 
                             PRIMARY KEY(id)
                        )');
 
         // User table
-        $this->addSql('CREATE TABLE `users` (
+        $this->addSql('CREATE TABLE `user` (
                             id INT AUTO_INCREMENT NOT NULL, 
                             name VARCHAR(100) NOT NULL, 
                             role VARCHAR(50) NOT NULL, 
@@ -32,7 +32,7 @@ final class Version20241101235959 extends AbstractMigration
                             INDEX IDX_COMPANY_ID (company_id), 
                             PRIMARY KEY(id)
                     )');
-        $this->addSql('ALTER TABLE `users` ADD CONSTRAINT FK_COMPANY_ID FOREIGN KEY (company_id) REFERENCES `companies` (id)');
+        $this->addSql('ALTER TABLE `user` ADD CONSTRAINT FK_COMPANY_ID FOREIGN KEY (company_id) REFERENCES `company` (id)');
     }
 
     public function down(Schema $schema): void
