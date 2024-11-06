@@ -24,21 +24,21 @@ final class Version20241101235959 extends AbstractMigration
                        )');
 
         // User table
-        $this->addSql('CREATE TABLE `user` (
-                            id INT AUTO_INCREMENT NOT NULL, 
-                            name VARCHAR(100) NOT NULL, 
-                            role VARCHAR(50) NOT NULL, 
-                            company_id INT DEFAULT NULL, 
-                            INDEX IDX_COMPANY_ID (company_id), 
-                            PRIMARY KEY(id)
-                    )');
-        $this->addSql('ALTER TABLE `user` ADD CONSTRAINT FK_COMPANY_ID FOREIGN KEY (company_id) REFERENCES `company` (id)');
+//        $this->addSql('CREATE TABLE `user` (
+//                            id INT AUTO_INCREMENT NOT NULL,
+//                            name VARCHAR(100) NOT NULL,
+//                            role VARCHAR(50) NOT NULL,
+//                            company_id INT DEFAULT NULL,
+//                            INDEX IDX_COMPANY_ID (company_id),
+//                            PRIMARY KEY(id)
+//                    )');
+//        $this->addSql('ALTER TABLE `user` ADD CONSTRAINT FK_COMPANY_ID FOREIGN KEY (company_id) REFERENCES `company` (id)');
     }
 
     public function down(Schema $schema): void
     {
         // Drop the user table
-        $this->addSql('DROP TABLE `user`');
+//        $this->addSql('DROP TABLE `user`');
         // Drop the company table
         $this->addSql('DROP TABLE `company`');
     }
