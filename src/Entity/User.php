@@ -9,11 +9,13 @@ use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
 use App\State\UserProcessor;
 use App\State\UserProvider;
+use App\Validator\Constraints\CompanyRequired;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_ID', fields: ['id'])]
@@ -29,6 +31,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    const ROLE_USER = 'ROLE_USER';
+    const ROLE_COMPANY_ADMIN = 'ROLE_COMPANY_ADMIN';
+    const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -144,5 +149,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getCompany(): ?Company
     {
         return $this->company;
+    }
+
+    public function setCompany(?Company $company): self
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    {
+        $metadata->addPropertyConstraint('company', new CompanyRequired());
     }
 }
