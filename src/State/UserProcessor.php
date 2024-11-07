@@ -2,7 +2,6 @@
 
 namespace App\State;
 
-use ApiPlatform\Doctrine\Common\State\PersistProcessor;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Operation;
@@ -19,7 +18,6 @@ class UserProcessor implements ProcessorInterface
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private PersistProcessor       $persistProcessor,
         private Security $security
     )
     {
@@ -57,7 +55,9 @@ class UserProcessor implements ProcessorInterface
                 throw new \InvalidArgumentException('The Company field is required.');
             }
 
-            return $this->persistProcessor->process($data, $operation, $uriVariables, $context);
+            $this->entityManager->persist($data);
+            $this->entityManager->flush();
+            return $data;
         }
         if ($operation instanceof Patch) {
             $userId = $uriVariables['id'];
