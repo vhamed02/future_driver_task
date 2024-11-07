@@ -5,11 +5,11 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use App\Repository\UserRepository;
 use App\State\UserProcessor;
 use App\State\UserProvider;
-use App\Validator\Constraints\CompanyRequired;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -24,6 +24,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
         new GetCollection(),
         new Post(),
         new Delete(security: 'is_granted("ROLE_SUPER_ADMIN")'),
+        new Patch(security: 'is_granted("ROLE_SUPER_ADMIN") or is_granted("ROLE_COMPANY_ADMIN")'),
     ],
     normalizationContext: ['groups' => ['read']],
     processor: UserProcessor::class,
@@ -52,7 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column(type: 'string', length: 255)]
     #[Groups(['read'])]
-    private ?string $role = 'ROLE_USER';
+    private ?string $role = self::ROLE_USER;
 
     #[ORM\ManyToOne(inversedBy: 'user')]
     #[Groups(['read'])]
@@ -158,8 +159,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata): void
-    {
-        $metadata->addPropertyConstraint('company', new CompanyRequired());
-    }
 }
